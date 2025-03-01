@@ -160,39 +160,246 @@ def index():
     """Serve a simple HTML page for manual testing"""
     return '''
     <!DOCTYPE html>
-    <html>
+    <html lang="en">
     <head>
-        <title>Real Estate Data Processor</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chesapeake Stays - Real Estate Data Processor</title>
         <style>
-            body { font-family: Arial, sans-serif; margin: 40px; }
-            .container { max-width: 800px; margin: 0 auto; }
-            .form-group { margin-bottom: 20px; }
-            button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-            .info { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 20px; }
+            :root {
+                --primary: #1a4b84;
+                --secondary: #2c7873;
+                --accent: #f4a261;
+                --light: #f8f9fa;
+                --dark: #2b2d42;
+                --white: #ffffff;
+                --gray: #6c757d;
+            }
+            
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+                line-height: 1.6;
+                color: var(--dark);
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                min-height: 100vh;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 2rem;
+            }
+            
+            .header {
+                text-align: center;
+                margin-bottom: 3rem;
+                padding: 2rem 0;
+                background: var(--white);
+                border-radius: 15px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            .logo {
+                max-width: 250px;
+                margin-bottom: 1rem;
+            }
+            
+            h1 {
+                color: var(--primary);
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .subtitle {
+                color: var(--gray);
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .upload-section {
+                background: var(--white);
+                padding: 2rem;
+                border-radius: 15px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                margin-bottom: 2rem;
+            }
+            
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+            
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                color: var(--dark);
+                font-weight: 600;
+            }
+            
+            .file-input-wrapper {
+                position: relative;
+                margin-bottom: 1rem;
+            }
+            
+            .file-input {
+                width: 100%;
+                padding: 1rem;
+                border: 2px dashed var(--primary);
+                border-radius: 8px;
+                background: var(--light);
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .file-input:hover {
+                border-color: var(--accent);
+                background: #fff;
+            }
+            
+            .btn {
+                display: inline-block;
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+                font-weight: 600;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                border: none;
+                width: 100%;
+            }
+            
+            .btn-primary {
+                background: var(--primary);
+                color: var(--white);
+            }
+            
+            .btn-primary:hover {
+                background: var(--secondary);
+                transform: translateY(-2px);
+            }
+            
+            .info-section {
+                background: var(--white);
+                padding: 2rem;
+                border-radius: 15px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            .info-section h2 {
+                color: var(--primary);
+                margin-bottom: 1rem;
+                font-size: 1.5rem;
+            }
+            
+            .api-list {
+                list-style: none;
+            }
+            
+            .api-list li {
+                padding: 1rem;
+                border-bottom: 1px solid var(--light);
+                display: flex;
+                align-items: center;
+            }
+            
+            .api-list li:last-child {
+                border-bottom: none;
+            }
+            
+            .api-endpoint {
+                background: var(--light);
+                padding: 0.5rem 1rem;
+                border-radius: 4px;
+                font-family: monospace;
+                margin-right: 1rem;
+                color: var(--primary);
+            }
+            
+            .api-description {
+                color: var(--gray);
+            }
+            
+            .footer {
+                text-align: center;
+                margin-top: 3rem;
+                padding: 2rem 0;
+                color: var(--gray);
+            }
+            
+            @media (max-width: 768px) {
+                .container {
+                    padding: 1rem;
+                }
+                
+                h1 {
+                    font-size: 2rem;
+                }
+                
+                .btn {
+                    padding: 0.8rem 1.5rem;
+                }
+            }
         </style>
     </head>
     <body>
         <div class="container">
-            <h1>Real Estate Data Processor</h1>
-            <p>Upload your real estate data files for processing.</p>
+            <header class="header">
+                <h1>Chesapeake Stays</h1>
+                <p class="subtitle">Real Estate Data Processing Portal</p>
+            </header>
             
-            <form action="/process" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="files">Select files (CSV, XLSX, XLS):</label><br>
-                    <input type="file" id="files" name="files" multiple accept=".csv,.xlsx,.xls">
-                </div>
-                <button type="submit">Process Files (Download CSV)</button>
-            </form>
+            <main>
+                <section class="upload-section">
+                    <form action="/process" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="files">Upload Real Estate Data Files</label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="files" name="files" multiple 
+                                       accept=".csv,.xlsx,.xls" class="file-input">
+                            </div>
+                            <small style="color: var(--gray);">
+                                Accepted formats: CSV, XLSX, XLS (Max 50MB)
+                            </small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            Process & Download Results
+                        </button>
+                    </form>
+                </section>
+                
+                <section class="info-section">
+                    <h2>Available API Endpoints</h2>
+                    <ul class="api-list">
+                        <li>
+                            <span class="api-endpoint">/process</span>
+                            <span class="api-description">Upload files and receive processed CSV</span>
+                        </li>
+                        <li>
+                            <span class="api-endpoint">/process-sync</span>
+                            <span class="api-description">Upload files and receive JSON response</span>
+                        </li>
+                        <li>
+                            <span class="api-endpoint">/health</span>
+                            <span class="api-description">Check API health status</span>
+                        </li>
+                        <li>
+                            <span class="api-endpoint">/config</span>
+                            <span class="api-description">View application configuration</span>
+                        </li>
+                    </ul>
+                </section>
+            </main>
             
-            <div class="info">
-                <h3>API Endpoints:</h3>
-                <ul>
-                    <li><code>/process</code> - Upload files and receive processed CSV</li>
-                    <li><code>/process-sync</code> - Upload files and receive JSON response</li>
-                    <li><code>/health</code> - Health check endpoint</li>
-                    <li><code>/config</code> - Get application configuration</li>
-                </ul>
-            </div>
+            <footer class="footer">
+                <p>&copy; 2025 Chesapeake Stays LLC. All rights reserved.</p>
+            </footer>
         </div>
     </body>
     </html>

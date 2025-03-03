@@ -2,11 +2,14 @@ from flask import Flask, request, jsonify, send_file
 import io
 import os
 import uuid
+from flask_cors import CORS
 import tempfile
 from werkzeug.utils import secure_filename
 from real_estate_processor import RealEstateDataProcessor  
 
 app = Flask(__name__)
+# Enable CORS for all origins
+CORS(app)
 
 # Configure upload settings
 ALLOWED_EXTENSIONS = {'csv', 'xlsx', 'xls'}
